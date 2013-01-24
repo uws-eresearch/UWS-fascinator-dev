@@ -22,7 +22,7 @@ class IndexData:
 
         # Common data
         self.__newDoc()
-        self.__security("abc")
+        self.__security()
 
         # Real metadata
         if self.itemType == "object":
@@ -70,7 +70,7 @@ class IndexData:
             except Exception, e:
                 pass
 
-    def __security(self, topDir):
+    def __security(self):
         """roles = self.utils.getRolesWithAccess(self.oid)
         if roles is not None:
             for role in roles:
@@ -84,9 +84,15 @@ class IndexData:
             self.utils.add(self.index, "security_filter", "guest")"""
         
         baseFilePath = self.params["base.file.path"]
-        filePath = baseFilePath.rstrip("/")
-        baseDir = os.path.basename(filePath) 
-        self.log.info("Base path is "+baseFilePath+" base dir is "+baseDir+" file path is "+baseDir)  
+        path = self.object.getMetadata().getProperty("file.path")
+        pathStr = str(path)
+        if pathStr.startswith(baseFilePath):
+            pathStr = pathStr[len(baseFilePath):]
+            
+        #filePath = baseFilePath.rstrip("/")
+        #baseDir = os.path.basename(filePath) 
+        baseDir, rest = pathStr.split("/",1)
+        self.log.info(" Base dir is "+baseDir +" File path is "+pathStr)  
         self.utils.add(self.index, "security_filter", baseDir)
 	
 
