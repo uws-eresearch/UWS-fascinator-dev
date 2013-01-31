@@ -4,6 +4,7 @@
 #
 # jvm memory settings
 JAVA_OPTS="-XX:MaxPermSize=256m -Xmx2048m"
+RMTDEBUG_OPTS="-Xdebug -Xrunjdwp:transport=dt_socket,address=4000,server=y,suspend=y"
 
 # use http_proxy if defined
 if [ -n "$http_proxy" ]; then
@@ -29,4 +30,7 @@ fi
 CONFIG_DIRS="-Dfascinator.home=$TF_HOME -Dsolr.base.dir=$SOLR_BASE_DIR"
 
 # set options for maven to use
-export MAVEN_OPTS="$JAVA_OPTS $PROXY_OPTS $CONFIG_DIRS"
+echo "PROXY_OPTS are $PROXY_OPTS"
+echo "JAVA_OPTS are $JAVA_OPTS"
+echo "REMOTE DEBUG opts are $RMTDEBUG_OPTS"
+export MAVEN_OPTS="$JAVA_OPTS $RMTDEBUG_OPTS $PROXY_OPTS $CONFIG_DIRS"
