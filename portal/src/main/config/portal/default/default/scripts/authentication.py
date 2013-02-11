@@ -12,6 +12,7 @@ class AuthenticationData:
     GUEST_ROLE = 'guest'
     GUEST_USER = 'guest'
     roleList = None
+    permList = None
 
     def __activate__(self, context):
         self.security = context["security"]
@@ -138,6 +139,25 @@ class AuthenticationData:
             self.roleList = role_list
 
         return self.roleList
+    
+    def get_permissions_list(self):
+        # Use the cache if we can
+        if self.permList is None:
+            perm_list = []
+            try:
+                if self.current_user is not None:
+                    # Otherwise retrieve from the plugin
+                    java_list = self.security.getFilePermissions(self.sessionState, self.current_user)
+                    if java_list is not None:
+                        for group in java_list:
+                            perm_list.append(group)
+            except Exception, e:
+                self.error_message = self.parse_error(e)
+
+            #perm_list.append(self.GUEST_ROLE)
+            self.permList = perm_list
+            
+        return self.permList
 
     def get_access_roles_list(self, recordId):
         try:

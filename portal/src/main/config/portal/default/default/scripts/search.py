@@ -178,8 +178,10 @@ class SearchData:
         # Make sure 'fq' has already been set in the session
         if not self.page.authentication.is_admin():
             current_user = self.page.authentication.get_username()
-            security_roles = self.page.authentication.get_roles_list()
-            security_filter = 'security_filter:("' + '" OR "'.join(security_roles) + '")'
+            #security_roles = self.page.authentication.get_roles_list()
+            #security_filter = 'security_filter:("' + '" OR "'.join(security_roles) + '")'
+            permissions = self.page.authentication.get_permissions_list();
+            security_filter = 'security_filter:("' + '" OR "'.join(permissions) + '")'
             security_exceptions = 'security_exception:"' + current_user + '"'
             owner_query = 'owner:"' + current_user + '"'
             security_query = "(" + security_filter + ") OR (" + security_exceptions + ") OR (" + owner_query + ")"

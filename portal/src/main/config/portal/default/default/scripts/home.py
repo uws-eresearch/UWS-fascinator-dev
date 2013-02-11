@@ -31,12 +31,15 @@ class HomeData:
         
         # Security prep work
         current_user = self.vc("page").authentication.get_username()
-        security_roles = self.vc("page").authentication.get_roles_list()
-        security_filter = 'security_filter:("' + '" OR "'.join(security_roles) + '")'
+        #security_roles = self.vc("page").authentication.get_roles_list()
+        permissions = self.vc("page").authentication.get_permissions_list();
+        #security_filter = 'security_filter:("' + '" OR "'.join(security_roles) + '")'
+        security_filter = 'security_filter:("' + '" OR "'.join(permissions) + '")'
         security_exceptions = 'security_exception:"' + current_user + '"'
         owner_query = 'owner:"' + current_user + '"'
         security_query = "(" + security_filter + ") OR (" + security_exceptions + ") OR (" + owner_query + ")"
         isAdmin = self.vc("page").authentication.is_admin()
+        
 
         req = SearchRequest("last_modified:[NOW-1MONTH TO *]")
         req.setParam("fq", 'item_type:"object"')

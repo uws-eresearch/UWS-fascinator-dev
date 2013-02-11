@@ -67,6 +67,14 @@ public interface PortalSecurityManager {
     public String[] getRolesList(JsonSessionState session, User user);
 
     /**
+     * Get the list of roles possessed by the current user from a json file.
+     * 
+     * @param user The user object of the current user
+     * @return String[] A list of roles
+     */
+    public String[] getFilePermissions(JsonSessionState session, User user);
+
+    /**
      * Retrieve the details of a user by username
      * 
      * @param username The username of a user to retrieve

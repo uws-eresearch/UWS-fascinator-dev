@@ -18,6 +18,7 @@
  */
 package com.googlecode.fascinator.portal.services.impl;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -144,6 +145,9 @@ public class PortalSecurityManagerImpl implements PortalSecurityManager {
     /** Trust tokens - Expiry period */
     private Map<String, Long> tokenExpiry;
 
+    /** User permissions */
+    private JsonSimple permissions;
+
     /**
      * Basic constructor, should be run automatically by Tapestry.
      * 
@@ -151,6 +155,10 @@ public class PortalSecurityManagerImpl implements PortalSecurityManager {
     public PortalSecurityManagerImpl() throws IOException {
         // Get system configuration
         config = new JsonSimpleConfig();
+
+        // Get permissions from a json file
+        String permissions_path = config.getString(null, "permissions", "path");
+        permissions = new JsonSimple(new File(permissions_path));
 
         // For all SSO providers configured
         sso = new LinkedHashMap<String, SSOInterface>();
@@ -271,6 +279,29 @@ public class PortalSecurityManagerImpl implements PortalSecurityManager {
 
         // Cast to array and return
         return ssoRoles.toArray(standardRoles);
+    }
+
+    /**
+     * Get the list of roles possessed by the current user from a json file.
+     * 
+     * @param user The user object of the current user
+     * @return String[] A list of groups, null if no groups found
+     */
+    public String[] getFilePermissions(JsonSessionState session, User user) {
+
+        // Standard Users
+        GenericUser gUser = (GenericUser) user;
+
+        String groupStr = permissions.getString(null, gUser.getUsername());
+
+        String[] groups = StringUtils.split(groupStr, ",");
+
+        if (groups != null) {
+            return groups;
+        }
+
+        return null;
+
     }
 
     /**

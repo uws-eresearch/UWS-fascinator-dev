@@ -30,6 +30,9 @@
             "path": "${fascinator.home}/security/roles.properties"
         }
     },
+    "permissions" : {
+		"path" : "${fascinator.home}/security/permissions.json"
+    },
     "storage": {
         "type": "file-system",
         "file-system": {
