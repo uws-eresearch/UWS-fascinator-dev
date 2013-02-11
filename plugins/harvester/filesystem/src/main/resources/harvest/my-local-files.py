@@ -92,7 +92,7 @@ class IndexData:
         #filePath = baseFilePath.rstrip("/")
         #baseDir = os.path.basename(filePath) 
         baseDir, rest = pathStr.split("/",1)
-        self.log.info(" Base dir is "+baseDir +" File path is "+pathStr)  
+        self.log.info(" Base dir is "+baseDir + " Full path is " + path +" Base path is "+baseFilePath + " File path is "+pathStr)  
         self.utils.add(self.index, "security_filter", baseDir)
 	
 
