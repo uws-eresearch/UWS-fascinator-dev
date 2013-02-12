@@ -71,26 +71,14 @@ class IndexData:
                 pass
 
     def __security(self):
-        """roles = self.utils.getRolesWithAccess(self.oid)
-        if roles is not None:
-            for role in roles:
-                self.utils.add(self.index, "security_filter", role)
-        else:
-            # Default to guest access if Null object returned
-            schema = self.utils.getAccessSchema("derby");
-            schema.setRecordId(self.oid)
-            schema.set("role", "guest")
-            self.utils.setAccessSchema(schema, "derby")
-            self.utils.add(self.index, "security_filter", "guest")"""
-        
         baseFilePath = self.params["base.file.path"]
         path = self.object.getMetadata().getProperty("file.path")
         pathStr = str(path)
         if pathStr.startswith(baseFilePath):
             pathStr = pathStr[len(baseFilePath):]
             
-        #filePath = baseFilePath.rstrip("/")
-        #baseDir = os.path.basename(filePath) 
+        if pathStr.startswith("/"):
+            pathStr = pathStr.lstrip("/")
         baseDir, rest = pathStr.split("/",1)
         self.log.info(" Base dir is "+baseDir + " Full path is " + path +" Base path is "+baseFilePath + " File path is "+pathStr)  
         self.utils.add(self.index, "security_filter", baseDir)
